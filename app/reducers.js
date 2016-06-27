@@ -5,16 +5,11 @@ const initialState = {
   todos: []
 };
 
-function todoAPP (state = initialState, action) {
+function todos (state = [], action) {
   switch (action.type) {
-    case SET_VISIBILITY_FILTER:
-      return Object.assign({}, state, {
-        visibilityFilter: action.filter
-      });
     case ADD_TODO:
-      return Object.assign({}, state, {
-        todos: [
-          ...state.todos,
+      return [
+          ...state,
           {
             text: action.text,
             completed: false
@@ -22,17 +17,31 @@ function todoAPP (state = initialState, action) {
         ]
       });
     case TOGGLE_TODO:
-      return Object.assign({}, state {
-        todos: state.todos.map((todo, index) => {
+      return state.map((todo, index) => {
           if (index === action.index) {
             return Object.assign({}, todo, {
               completed: !todo.completed
             })
           }
           return todo;
-        }
-      });
+        };
     default:
       return state;
   }
+}
+
+function visibilityFilter(state = SHOW_ALL, action) {
+  switch (action.type) {
+    case SET_VISIBILITY_FILTER:
+      return action.filter;
+    default:
+      return state;
+  }
+}
+
+function todoAPP (state = {}, action) {
+  return {
+    visibilityFilter: visibilityFilter(state.visibilityFilter, action),
+    todos: todos(state.todos, action)
+  };
 }
