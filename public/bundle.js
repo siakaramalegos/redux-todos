@@ -48,6 +48,8 @@
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 	var _react = __webpack_require__(1);
 
 	var _react2 = _interopRequireDefault(_react);
@@ -81,13 +83,15 @@
 	var store = (0, _redux.createStore)(_reducers2.default);
 
 	var render = function render() {
-	  _reactDom2.default.render(_react2.default.createElement(App, { todos: store.getState().todos, __self: undefined
-	  }), document.getElementById('app'));
+	  _reactDom2.default.render(_react2.default.createElement(App, _extends({}, store.getState(), {
+	    __self: undefined
+	  })), document.getElementById('app'));
 	};
 
 	// To delete:
 
 	var nextTodoId = 0;
+	// TODO: fix input not clearing
 
 	var App = function (_React$Component) {
 	  _inherits(App, _React$Component);
@@ -102,6 +106,12 @@
 	    key: 'render',
 	    value: function render() {
 	      var _this2 = this;
+
+	      var _props = this.props;
+	      var todos = _props.todos;
+	      var visibilityFilter = _props.visibilityFilter;
+
+	      var visibleTodos = getVisibleTodos(todos, visibilityFilter);
 
 	      return _react2.default.createElement(
 	        'div',
@@ -128,20 +138,97 @@
 	          'Add Todo'
 	        ),
 	        _react2.default.createElement(_TodoList2.default, {
-	          todos: this.props.todos,
+	          todos: visibleTodos,
 	          onTodoClick: function onTodoClick(id) {
 	            store.dispatch({
 	              type: 'TOGGLE_TODO',
 	              id: id
 	            });
 	          }, __self: this
-	        })
+	        }),
+	        _react2.default.createElement(
+	          'div',
+	          {
+	            __self: this
+	          },
+	          'Show: ',
+	          '  ',
+	          _react2.default.createElement(
+	            FilterLink,
+	            {
+	              filter: 'SHOW_ALL',
+	              currentFilter: visibilityFilter, __self: this
+	            },
+	            'All'
+	          ),
+	          '  ',
+	          _react2.default.createElement(
+	            FilterLink,
+	            {
+	              filter: 'SHOW_COMPLETED',
+	              currentFilter: visibilityFilter, __self: this
+	            },
+	            'Completed'
+	          ),
+	          '  ',
+	          _react2.default.createElement(
+	            FilterLink,
+	            {
+	              filter: 'SHOW_ACTIVE',
+	              currentFilter: visibilityFilter, __self: this
+	            },
+	            'Active'
+	          )
+	        )
 	      );
 	    }
 	  }]);
 
 	  return App;
 	}(_react2.default.Component);
+
+	var getVisibleTodos = function getVisibleTodos(todos, filter) {
+	  switch (filter) {
+	    case 'SHOW_ALL':
+	      return todos;
+	    case 'SHOW_COMPLETED':
+	      return todos.filter(function (todo) {
+	        return todo.completed;
+	      });
+	    case 'SHOW_ACTIVE':
+	      return todos.filter(function (todo) {
+	        return !todo.completed;
+	      });
+	  }
+	};
+
+	var FilterLink = function FilterLink(_ref) {
+	  var filter = _ref.filter;
+	  var currentFilter = _ref.currentFilter;
+	  var children = _ref.children;
+
+	  if (currentFilter === filter) {
+	    return _react2.default.createElement(
+	      'span',
+	      {
+	        __self: undefined
+	      },
+	      children
+	    );
+	  }
+	  return _react2.default.createElement(
+	    'a',
+	    { href: '#', onClick: function onClick(e) {
+	        e.preventDefault();
+	        store.dispatch({
+	          type: 'SET_VISIBILITY_FILTER',
+	          filter: filter
+	        });
+	      }, __self: undefined
+	    },
+	    children
+	  );
+	};
 
 	store.subscribe(render);
 	render();
@@ -22303,8 +22390,8 @@
 	    id: _react.PropTypes.number.isRequired,
 	    completed: _react.PropTypes.bool.isRequired,
 	    text: _react.PropTypes.string.isRequired
-	  }).isRequired).isRequired //,
-	  //onTodoClick: PropTypes.func.isRequired
+	  }).isRequired).isRequired,
+	  onTodoClick: _react.PropTypes.func.isRequired
 	};
 
 	exports.default = TodoList;

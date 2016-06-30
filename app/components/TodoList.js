@@ -18,8 +18,8 @@ TodoList.propTypes = {
     id: PropTypes.number.isRequired,
     completed: PropTypes.bool.isRequired,
     text: PropTypes.string.isRequired
-  }).isRequired).isRequired//,
-  //onTodoClick: PropTypes.func.isRequired
+  }).isRequired).isRequired,
+  onTodoClick: PropTypes.func.isRequired
 }
 
 export default TodoList
