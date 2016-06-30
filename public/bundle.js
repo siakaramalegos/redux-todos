@@ -68,6 +68,14 @@
 
 	var _TodoList2 = _interopRequireDefault(_TodoList);
 
+	var _AddTodo = __webpack_require__(198);
+
+	var _AddTodo2 = _interopRequireDefault(_AddTodo);
+
+	var _Footer = __webpack_require__(199);
+
+	var _Footer2 = _interopRequireDefault(_Footer);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	// import App from './components/App'
@@ -82,43 +90,16 @@
 
 	// To delete:
 
-	var AddTodo = function AddTodo(_ref) {
-	  var onAddClick = _ref.onAddClick;
-
-	  var input = void 0;
-
-	  return _react2.default.createElement(
-	    'form',
-	    {
-	      __self: undefined
-	    },
-	    _react2.default.createElement('input', { ref: function ref(node) {
-	        input = node;
-	      }, type: 'text', __self: undefined
-	    }),
-	    _react2.default.createElement(
-	      'button',
-	      { onClick: function onClick(e) {
-	          e.preventDefault();
-	          onAddClick(input.value);
-	          input.value = '';
-	        }, __self: undefined
-	      },
-	      'Add Todo'
-	    )
-	  );
-	};
-
 	var nextTodoId = 0;
-	var App = function App(_ref2) {
-	  var todos = _ref2.todos;
-	  var visibilityFilter = _ref2.visibilityFilter;
+	var App = function App(_ref) {
+	  var todos = _ref.todos;
+	  var visibilityFilter = _ref.visibilityFilter;
 	  return _react2.default.createElement(
 	    'div',
 	    {
 	      __self: undefined
 	    },
-	    _react2.default.createElement(AddTodo, {
+	    _react2.default.createElement(_AddTodo2.default, {
 	      onAddClick: function onAddClick(text) {
 	        return store.dispatch({
 	          type: 'ADD_TODO',
@@ -136,7 +117,7 @@
 	        });
 	      }, __self: undefined
 	    }),
-	    _react2.default.createElement(Footer, {
+	    _react2.default.createElement(_Footer2.default, {
 	      visibilityFilter: visibilityFilter,
 	      onFilterClick: function onFilterClick(filter) {
 	        store.dispatch({
@@ -145,49 +126,6 @@
 	        });
 	      }, __self: undefined
 	    })
-	  );
-	};
-
-	var Footer = function Footer(_ref3) {
-	  var visibilityFilter = _ref3.visibilityFilter;
-	  var onFilterClick = _ref3.onFilterClick;
-
-	  return _react2.default.createElement(
-	    'div',
-	    {
-	      __self: undefined
-	    },
-	    'Show: ',
-	    '  ',
-	    _react2.default.createElement(
-	      FilterLink,
-	      {
-	        filter: 'SHOW_ALL',
-	        currentFilter: visibilityFilter,
-	        onClick: onFilterClick, __self: undefined
-	      },
-	      'All'
-	    ),
-	    '  ',
-	    _react2.default.createElement(
-	      FilterLink,
-	      {
-	        filter: 'SHOW_COMPLETED',
-	        currentFilter: visibilityFilter,
-	        onClick: onFilterClick, __self: undefined
-	      },
-	      'Completed'
-	    ),
-	    '  ',
-	    _react2.default.createElement(
-	      FilterLink,
-	      {
-	        filter: 'SHOW_ACTIVE',
-	        currentFilter: visibilityFilter,
-	        onClick: onFilterClick, __self: undefined
-	      },
-	      'Active'
-	    )
 	  );
 	};
 
@@ -204,32 +142,6 @@
 	        return !todo.completed;
 	      });
 	  }
-	};
-
-	var FilterLink = function FilterLink(_ref4) {
-	  var filter = _ref4.filter;
-	  var currentFilter = _ref4.currentFilter;
-	  var children = _ref4.children;
-	  var _onClick = _ref4.onClick;
-
-	  if (currentFilter === filter) {
-	    return _react2.default.createElement(
-	      'span',
-	      {
-	        __self: undefined
-	      },
-	      children
-	    );
-	  }
-	  return _react2.default.createElement(
-	    'a',
-	    { href: '#', onClick: function onClick(e) {
-	        e.preventDefault();
-	        _onClick(filter);
-	      }, __self: undefined
-	    },
-	    children
-	  );
 	};
 
 	store.subscribe(render);
@@ -22435,6 +22347,222 @@
 	};
 
 	exports.default = Todo;
+
+/***/ },
+/* 198 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	// import { connect } from 'react-redux'
+	// import { addTodo } from '../actions'
+
+	// let AddTodo = ({ dispatch }) => {
+	//   let input
+
+	//   return (
+	//     <div>
+	//       <form onSubmit={ e => {
+	//         e.preventDefault()
+	//         if (!input.value.trim()) {
+	//           return
+	//         }
+	//         dispatch(addTodo(input.value))
+	//         input.value = ''
+	//       }}>
+	//         <input ref={ node => input = node } />
+	//         <button type="submit">
+	//           Add Todo
+	//         </button>
+	//       </form>
+	//     </div>
+	//   )
+	// }
+
+	// AddTodo = connect()(AddTodo)
+
+	var AddTodo = function AddTodo(_ref) {
+	  var onAddClick = _ref.onAddClick;
+
+	  var input = void 0;
+
+	  return _react2.default.createElement(
+	    'form',
+	    {
+	      __self: undefined
+	    },
+	    _react2.default.createElement('input', { ref: function ref(node) {
+	        input = node;
+	      }, type: 'text', __self: undefined
+	    }),
+	    _react2.default.createElement(
+	      'button',
+	      { onClick: function onClick(e) {
+	          e.preventDefault();
+	          onAddClick(input.value);
+	          input.value = '';
+	        }, __self: undefined
+	      },
+	      'Add Todo'
+	    )
+	  );
+	};
+
+	exports.default = AddTodo;
+
+/***/ },
+/* 199 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _FilterLink = __webpack_require__(200);
+
+	var _FilterLink2 = _interopRequireDefault(_FilterLink);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	// const Footer = () => (
+	//   <p>
+	//     Show:
+	//     {'  '}
+	//     <FilterLink filter="SHOW_ALL">All</FilterLink>
+	//     {', '}
+	//     <FilterLink filter="SHOW_ACTIVE">Active</FilterLink>
+	//     {', '}
+	//     <FilterLink filter="SHOW_COMPLETED">Completed</FilterLink>
+	//   </p>
+	// )
+
+	var Footer = function Footer(_ref) {
+	  var visibilityFilter = _ref.visibilityFilter;
+	  var onFilterClick = _ref.onFilterClick;
+
+	  return _react2.default.createElement(
+	    'div',
+	    {
+	      __self: undefined
+	    },
+	    'Show: ',
+	    '  ',
+	    _react2.default.createElement(
+	      _FilterLink2.default,
+	      {
+	        filter: 'SHOW_ALL',
+	        currentFilter: visibilityFilter,
+	        onClick: onFilterClick, __self: undefined
+	      },
+	      'All'
+	    ),
+	    '  ',
+	    _react2.default.createElement(
+	      _FilterLink2.default,
+	      {
+	        filter: 'SHOW_COMPLETED',
+	        currentFilter: visibilityFilter,
+	        onClick: onFilterClick, __self: undefined
+	      },
+	      'Completed'
+	    ),
+	    '  ',
+	    _react2.default.createElement(
+	      _FilterLink2.default,
+	      {
+	        filter: 'SHOW_ACTIVE',
+	        currentFilter: visibilityFilter,
+	        onClick: onFilterClick, __self: undefined
+	      },
+	      'Active'
+	    )
+	  );
+	};
+
+	exports.default = Footer;
+
+/***/ },
+/* 200 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	// import { connect } from 'react-redux'
+	// import { setVisibilityFilter } from '../actions'
+	// import Link from '../components/Link'
+
+	// const mapStateToProps = (state, ownProps) => {
+	//   return {
+	//     active: ownProps.filter === state.visibilityFilter
+	//   }
+	// }
+
+	// const mapDispatchToProps = (dispatch, ownProps) => {
+	//   return {
+	//     onClick: () => {
+	//       dispatch(setVisibilityFilter(ownProps.filter))
+	//     }
+	//   }
+	// }
+
+	// const FilterLink = connect(
+	//   mapStateToProps,
+	//   mapDispatchToProps
+	// )(Link)
+
+	var FilterLink = function FilterLink(_ref) {
+	  var filter = _ref.filter;
+	  var currentFilter = _ref.currentFilter;
+	  var children = _ref.children;
+	  var _onClick = _ref.onClick;
+
+	  if (currentFilter === filter) {
+	    return _react2.default.createElement(
+	      'span',
+	      {
+	        __self: undefined
+	      },
+	      children
+	    );
+	  }
+	  return _react2.default.createElement(
+	    'a',
+	    { href: '#', onClick: function onClick(e) {
+	        e.preventDefault();
+	        _onClick(filter);
+	      }, __self: undefined
+	    },
+	    children
+	  );
+	};
+
+	exports.default = FilterLink;
 
 /***/ }
 /******/ ]);

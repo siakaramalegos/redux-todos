@@ -16,23 +16,8 @@ const render = () => {
 
 // To delete:
 import TodoList from './components/TodoList'
-
-const AddTodo = ({onAddClick}) => {
-  let input
-
-  return (
-    <form>
-      <input ref={ node => {input = node} } type='text' />
-      <button onClick={ (e) => {
-        e.preventDefault()
-        onAddClick(input.value)
-        input.value = ''
-      }}>
-        Add Todo
-      </button>
-    </form>
-  )
-}
+import AddTodo from './containers/AddTodo'
+import Footer from './components/Footer'
 
 let nextTodoId = 0
 const App = ({todos, visibilityFilter}) => (
@@ -64,34 +49,6 @@ const App = ({todos, visibilityFilter}) => (
   </div>
 )
 
-const Footer = ({visibilityFilter, onFilterClick}) => {
-  return (
-    <div>
-      Show: {'  '}
-      <FilterLink
-        filter='SHOW_ALL'
-        currentFilter={visibilityFilter}
-        onClick={onFilterClick}>
-          All
-      </FilterLink>
-      {'  '}
-      <FilterLink
-        filter='SHOW_COMPLETED'
-        currentFilter={visibilityFilter}
-        onClick={onFilterClick}>
-          Completed
-      </FilterLink>
-      {'  '}
-      <FilterLink
-        filter='SHOW_ACTIVE'
-        currentFilter={visibilityFilter}
-        onClick={onFilterClick}>
-          Active
-      </FilterLink>
-    </div>
-  )
-}
-
 const getVisibleTodos = (todos, filter) => {
   switch (filter) {
     case 'SHOW_ALL':
@@ -101,20 +58,6 @@ const getVisibleTodos = (todos, filter) => {
     case 'SHOW_ACTIVE':
       return todos.filter( todo => !todo.completed )
   }
-}
-
-const FilterLink = ({filter, currentFilter, children, onClick}) => {
-  if (currentFilter === filter) {
-    return <span>{children}</span>
-  }
-  return (
-    <a href='#' onClick={ e => {
-      e.preventDefault()
-      onClick(filter)
-    }}>
-      {children}
-    </a>
-  )
 }
 
 store.subscribe(render)
