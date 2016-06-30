@@ -90,8 +90,34 @@
 
 	// To delete:
 
+	var AddTodo = function AddTodo(_ref) {
+	  var onAddClick = _ref.onAddClick;
+
+	  var input = void 0;
+
+	  return _react2.default.createElement(
+	    'form',
+	    {
+	      __self: undefined
+	    },
+	    _react2.default.createElement('input', { ref: function ref(node) {
+	        input = node;
+	      }, type: 'text', __self: undefined
+	    }),
+	    _react2.default.createElement(
+	      'button',
+	      { onClick: function onClick(e) {
+	          e.preventDefault();
+	          onAddClick(input.value);
+	          input.value = '';
+	        }, __self: undefined
+	      },
+	      'Add Todo'
+	    )
+	  );
+	};
+
 	var nextTodoId = 0;
-	// TODO: fix input not clearing
 
 	var App = function (_React$Component) {
 	  _inherits(App, _React$Component);
@@ -105,8 +131,6 @@
 	  _createClass(App, [{
 	    key: 'render',
 	    value: function render() {
-	      var _this2 = this;
-
 	      var _props = this.props;
 	      var todos = _props.todos;
 	      var visibilityFilter = _props.visibilityFilter;
@@ -118,25 +142,15 @@
 	        {
 	          __self: this
 	        },
-	        _react2.default.createElement('input', {
-	          ref: function ref(node) {
-	            _this2.input = node;
-	          },
-	          type: 'text', __self: this
+	        _react2.default.createElement(AddTodo, {
+	          onAddClick: function onAddClick(text) {
+	            return store.dispatch({
+	              type: 'ADD_TODO',
+	              text: text,
+	              id: nextTodoId++
+	            });
+	          }, __self: this
 	        }),
-	        _react2.default.createElement(
-	          'button',
-	          { onClick: function onClick() {
-	              store.dispatch({
-	                type: 'ADD_TODO',
-	                text: _this2.input.value,
-	                id: nextTodoId++
-	              });
-	              _this2.input = '';
-	            }, __self: this
-	          },
-	          'Add Todo'
-	        ),
 	        _react2.default.createElement(_TodoList2.default, {
 	          todos: visibleTodos,
 	          onTodoClick: function onTodoClick(id) {
@@ -202,10 +216,10 @@
 	  }
 	};
 
-	var FilterLink = function FilterLink(_ref) {
-	  var filter = _ref.filter;
-	  var currentFilter = _ref.currentFilter;
-	  var children = _ref.children;
+	var FilterLink = function FilterLink(_ref2) {
+	  var filter = _ref2.filter;
+	  var currentFilter = _ref2.currentFilter;
+	  var children = _ref2.children;
 
 	  if (currentFilter === filter) {
 	    return _react2.default.createElement(

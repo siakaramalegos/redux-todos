@@ -17,8 +17,24 @@ const render = () => {
 // To delete:
 import TodoList from './components/TodoList'
 
+const AddTodo = ({onAddClick}) => {
+  let input
+
+  return (
+    <form>
+      <input ref={ node => {input = node} } type='text' />
+      <button onClick={ (e) => {
+        e.preventDefault()
+        onAddClick(input.value)
+        input.value = ''
+      }}>
+        Add Todo
+      </button>
+    </form>
+  )
+}
+
 let nextTodoId = 0
-// TODO: fix input not clearing
 class App extends React.Component {
   render () {
     const {todos, visibilityFilter} = this.props
@@ -26,19 +42,14 @@ class App extends React.Component {
 
     return (
       <div>
-        <input
-          ref={ node => {this.input = node} }
-          type='text' />
-        <button onClick={ () => {
-          store.dispatch({
-            type: 'ADD_TODO',
-            text: this.input.value,
-            id: nextTodoId++
-          })
-          this.input = ''
-        }}>
-          Add Todo
-        </button>
+        <AddTodo
+          onAddClick={ (text) =>
+            store.dispatch({
+              type: 'ADD_TODO',
+              text,
+              id: nextTodoId++
+            })
+          } />
         <TodoList
           todos={visibleTodos}
           onTodoClick={ (id) => {
