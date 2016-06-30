@@ -64,7 +64,7 @@
 
 	var _reducers2 = _interopRequireDefault(_reducers);
 
-	var _TodoList = __webpack_require__(198);
+	var _TodoList = __webpack_require__(196);
 
 	var _TodoList2 = _interopRequireDefault(_TodoList);
 
@@ -101,19 +101,28 @@
 	  _createClass(App, [{
 	    key: 'render',
 	    value: function render() {
+	      var _this2 = this;
+
 	      return _react2.default.createElement(
 	        'div',
 	        {
 	          __self: this
 	        },
+	        _react2.default.createElement('input', {
+	          ref: function ref(node) {
+	            _this2.input = node;
+	          },
+	          type: 'text', __self: this
+	        }),
 	        _react2.default.createElement(
 	          'button',
 	          { onClick: function onClick() {
 	              store.dispatch({
 	                type: 'ADD_TODO',
-	                text: 'test',
+	                text: _this2.input.value,
 	                id: nextTodoId++
 	              });
+	              _this2.input = '';
 	            }, __self: this
 	          },
 	          'Add Todo'
@@ -22240,9 +22249,7 @@
 	}
 
 /***/ },
-/* 196 */,
-/* 197 */,
-/* 198 */
+/* 196 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22257,7 +22264,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Todo = __webpack_require__(199);
+	var _Todo = __webpack_require__(197);
 
 	var _Todo2 = _interopRequireDefault(_Todo);
 
@@ -22293,7 +22300,7 @@
 	exports.default = TodoList;
 
 /***/ },
-/* 199 */
+/* 197 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
