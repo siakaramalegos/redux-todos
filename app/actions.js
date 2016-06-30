@@ -11,8 +11,8 @@ export const VisibilityFilters = {
 }
 
 // Action creators
-export function addTodo(text) {
-  return {type: ADD_TODO, text}
+export function addTodo(text, id) {
+  return {type: ADD_TODO, text, id}
 }
 
 export function toggleTodo(index) {
