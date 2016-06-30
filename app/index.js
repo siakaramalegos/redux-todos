@@ -17,7 +17,7 @@ const render = () => {
 // To delete:
 import TodoList from './components/TodoList'
 import AddTodo from './containers/AddTodo'
-import Footer from './components/Footer'
+import Link from './components/Link'
 
 let nextTodoId = 0
 const App = ({todos, visibilityFilter}) => (
@@ -38,16 +38,50 @@ const App = ({todos, visibilityFilter}) => (
           id: id
         })
       }} />
-    <Footer
-      visibilityFilter={visibilityFilter}
-      onFilterClick={ (filter) => {
-        store.dispatch({
-          type: 'SET_VISIBILITY_FILTER',
-          filter
-        })
-      }} />
+    <Footer />
   </div>
 )
+
+const Footer = () => {
+  return (
+    <div>
+      Show: {'  '}
+      <FilterLink filter='SHOW_ALL'>All</FilterLink>
+      {'  '}
+      <FilterLink filter='SHOW_COMPLETED'>Completed</FilterLink>
+      {'  '}
+      <FilterLink filter='SHOW_ACTIVE'>Active</FilterLink>
+    </div>
+  )
+}
+
+class FilterLink extends React.Component {
+  componentDidMount () {
+    this.unsubscribe = store.subscribe( () => this.forceUpdate() )
+  }
+
+  componentWillUnmount () {
+    this.unsubscribe()
+  }
+
+  render () {
+    const props = this.props
+    const state = store.getState()
+
+    return (
+      <Link
+        active={state.visibilityFilter === props.filter}
+        onClick={ () => {
+          store.dispatch({
+            type: 'SET_VISIBILITY_FILTER',
+            filter: props.filter
+          })
+        }}>
+        {props.children}
+      </Link>
+    )
+  }
+}
 
 const getVisibleTodos = (todos, filter) => {
   switch (filter) {

@@ -46,6 +46,8 @@
 
 	'use strict';
 
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 	var _react = __webpack_require__(1);
@@ -72,11 +74,17 @@
 
 	var _AddTodo2 = _interopRequireDefault(_AddTodo);
 
-	var _Footer = __webpack_require__(199);
+	var _Link = __webpack_require__(201);
 
-	var _Footer2 = _interopRequireDefault(_Footer);
+	var _Link2 = _interopRequireDefault(_Link);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	// import App from './components/App'
 
@@ -117,17 +125,90 @@
 	        });
 	      }, __self: undefined
 	    }),
-	    _react2.default.createElement(_Footer2.default, {
-	      visibilityFilter: visibilityFilter,
-	      onFilterClick: function onFilterClick(filter) {
-	        store.dispatch({
-	          type: 'SET_VISIBILITY_FILTER',
-	          filter: filter
-	        });
-	      }, __self: undefined
+	    _react2.default.createElement(Footer, {
+	      __self: undefined
 	    })
 	  );
 	};
+
+	var Footer = function Footer() {
+	  return _react2.default.createElement(
+	    'div',
+	    {
+	      __self: undefined
+	    },
+	    'Show: ',
+	    '  ',
+	    _react2.default.createElement(
+	      FilterLink,
+	      { filter: 'SHOW_ALL', __self: undefined
+	      },
+	      'All'
+	    ),
+	    '  ',
+	    _react2.default.createElement(
+	      FilterLink,
+	      { filter: 'SHOW_COMPLETED', __self: undefined
+	      },
+	      'Completed'
+	    ),
+	    '  ',
+	    _react2.default.createElement(
+	      FilterLink,
+	      { filter: 'SHOW_ACTIVE', __self: undefined
+	      },
+	      'Active'
+	    )
+	  );
+	};
+
+	var FilterLink = function (_React$Component) {
+	  _inherits(FilterLink, _React$Component);
+
+	  function FilterLink() {
+	    _classCallCheck(this, FilterLink);
+
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(FilterLink).apply(this, arguments));
+	  }
+
+	  _createClass(FilterLink, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      var _this2 = this;
+
+	      this.unsubscribe = store.subscribe(function () {
+	        return _this2.forceUpdate();
+	      });
+	    }
+	  }, {
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      this.unsubscribe();
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var props = this.props;
+	      var state = store.getState();
+
+	      return _react2.default.createElement(
+	        _Link2.default,
+	        {
+	          active: state.visibilityFilter === props.filter,
+	          onClick: function onClick() {
+	            store.dispatch({
+	              type: 'SET_VISIBILITY_FILTER',
+	              filter: props.filter
+	            });
+	          }, __self: this
+	        },
+	        props.children
+	      );
+	    }
+	  }]);
+
+	  return FilterLink;
+	}(_react2.default.Component);
 
 	var getVisibleTodos = function getVisibleTodos(todos, filter) {
 	  switch (filter) {
@@ -22421,84 +22502,9 @@
 	exports.default = AddTodo;
 
 /***/ },
-/* 199 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _FilterLink = __webpack_require__(200);
-
-	var _FilterLink2 = _interopRequireDefault(_FilterLink);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	// const Footer = () => (
-	//   <p>
-	//     Show:
-	//     {'  '}
-	//     <FilterLink filter="SHOW_ALL">All</FilterLink>
-	//     {', '}
-	//     <FilterLink filter="SHOW_ACTIVE">Active</FilterLink>
-	//     {', '}
-	//     <FilterLink filter="SHOW_COMPLETED">Completed</FilterLink>
-	//   </p>
-	// )
-
-	var Footer = function Footer(_ref) {
-	  var visibilityFilter = _ref.visibilityFilter;
-	  var onFilterClick = _ref.onFilterClick;
-
-	  return _react2.default.createElement(
-	    'div',
-	    {
-	      __self: undefined
-	    },
-	    'Show: ',
-	    '  ',
-	    _react2.default.createElement(
-	      _FilterLink2.default,
-	      {
-	        filter: 'SHOW_ALL',
-	        currentFilter: visibilityFilter,
-	        onClick: onFilterClick, __self: undefined
-	      },
-	      'All'
-	    ),
-	    '  ',
-	    _react2.default.createElement(
-	      _FilterLink2.default,
-	      {
-	        filter: 'SHOW_COMPLETED',
-	        currentFilter: visibilityFilter,
-	        onClick: onFilterClick, __self: undefined
-	      },
-	      'Completed'
-	    ),
-	    '  ',
-	    _react2.default.createElement(
-	      _FilterLink2.default,
-	      {
-	        filter: 'SHOW_ACTIVE',
-	        currentFilter: visibilityFilter,
-	        onClick: onFilterClick, __self: undefined
-	      },
-	      'Active'
-	    )
-	  );
-	};
-
-	exports.default = Footer;
-
-/***/ },
-/* 200 */
+/* 199 */,
+/* 200 */,
+/* 201 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22513,36 +22519,36 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	// import { connect } from 'react-redux'
-	// import { setVisibilityFilter } from '../actions'
-	// import Link from '../components/Link'
-
-	// const mapStateToProps = (state, ownProps) => {
-	//   return {
-	//     active: ownProps.filter === state.visibilityFilter
+	// class Link extends React.Component {
+	//   static propTypes = {
+	//     active: React.PropTypes.bool.isRequired,
+	//     children: React.PropTypes.node.isRequired,
+	//     onClick: React.PropTypes.func.isRequired
 	//   }
-	// }
 
-	// const mapDispatchToProps = (dispatch, ownProps) => {
-	//   return {
-	//     onClick: () => {
-	//       dispatch(setVisibilityFilter(ownProps.filter))
+	//   onClick = (event) => {
+	//     event.preventDefault()
+	//     this.props.onClick()
+	//   }
+
+	//   render () {
+	//     const children = this.props.children
+	//     const active = this.props.active
+
+	//     if (active) {
+	//       return <span>{children}</span>
 	//     }
+
+	//     return <a href="#" onClick={this.onClick}>{children}</a>
 	//   }
 	// }
 
-	// const FilterLink = connect(
-	//   mapStateToProps,
-	//   mapDispatchToProps
-	// )(Link)
-
-	var FilterLink = function FilterLink(_ref) {
-	  var filter = _ref.filter;
-	  var currentFilter = _ref.currentFilter;
+	var Link = function Link(_ref) {
+	  var active = _ref.active;
 	  var children = _ref.children;
 	  var _onClick = _ref.onClick;
 
-	  if (currentFilter === filter) {
+	  if (active) {
 	    return _react2.default.createElement(
 	      'span',
 	      {
@@ -22551,18 +22557,19 @@
 	      children
 	    );
 	  }
+
 	  return _react2.default.createElement(
 	    'a',
 	    { href: '#', onClick: function onClick(e) {
 	        e.preventDefault();
-	        _onClick(filter);
+	        _onClick();
 	      }, __self: undefined
 	    },
 	    children
 	  );
 	};
 
-	exports.default = FilterLink;
+	exports.default = Link;
 
 /***/ }
 /******/ ]);
