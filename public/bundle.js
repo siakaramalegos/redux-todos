@@ -127,7 +127,14 @@
 	          },
 	          'Add Todo'
 	        ),
-	        _react2.default.createElement(_TodoList2.default, { todos: this.props.todos, __self: this
+	        _react2.default.createElement(_TodoList2.default, {
+	          todos: this.props.todos,
+	          onTodoClick: function onTodoClick(id) {
+	            store.dispatch({
+	              type: 'TOGGLE_TODO',
+	              id: id
+	            });
+	          }, __self: this
 	        })
 	      );
 	    }
@@ -22172,8 +22179,8 @@
 	        id: action.id
 	      }]);
 	    case _actions.TOGGLE_TODO:
-	      return state.map(function (todo, index) {
-	        if (index === action.index) {
+	      return state.map(function (todo) {
+	        if (todo.id === action.id) {
 	          return _extends({}, todo, {
 	            completed: !todo.completed
 	          });
@@ -22240,8 +22247,8 @@
 	  return { type: ADD_TODO, text: text, id: id };
 	}
 
-	function toggleTodo(index) {
-	  return { type: TOGGLE_TODO, index: index };
+	function toggleTodo(id) {
+	  return { type: TOGGLE_TODO, id: id };
 	}
 
 	function setVisibilityFilter(filter) {
@@ -22282,6 +22289,9 @@
 	      return _react2.default.createElement(_Todo2.default, _extends({
 	        key: todo.id
 	      }, todo, {
+	        onClick: function onClick() {
+	          return onTodoClick(todo.id);
+	        },
 	        __self: undefined
 	      }));
 	    })

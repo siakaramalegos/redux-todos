@@ -36,7 +36,14 @@ class App extends React.Component {
         }}>
           Add Todo
         </button>
-        <TodoList todos={this.props.todos} />
+        <TodoList
+          todos={this.props.todos}
+          onTodoClick={ (id) => {
+            store.dispatch({
+              type: 'TOGGLE_TODO',
+              id: id
+            })
+          }} />
       </div>
     )
   }
