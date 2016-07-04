@@ -25,8 +25,9 @@ import React from 'react'
 // }
 
 // AddTodo = connect()(AddTodo)
+let nextTodoId = 0
 
-const AddTodo = ({onAddClick}) => {
+const AddTodo = ({store}) => {
   let input
 
   return (
@@ -34,7 +35,11 @@ const AddTodo = ({onAddClick}) => {
       <input ref={ node => {input = node} } type='text' />
       <button onClick={ (e) => {
         e.preventDefault()
-        onAddClick(input.value)
+        store.dispatch({
+          type: 'ADD_TODO',
+          text: input.value,
+          id: nextTodoId++
+        })
         input.value = ''
       }}>
         Add Todo

@@ -1,7 +1,7 @@
 import React from 'react'
 // import { connect } from 'react-redux'
 // import { setVisibilityFilter } from '../actions'
-// import Link from '../components/Link'
+import Link from '../components/Link'
 
 // const mapStateToProps = (state, ownProps) => {
 //   return {
@@ -22,18 +22,34 @@ import React from 'react'
 //   mapDispatchToProps
 // )(Link)
 
-const FilterLink = ({filter, currentFilter, children, onClick}) => {
-  if (currentFilter === filter) {
-    return <span>{children}</span>
+class FilterLink extends React.Component {
+  componentDidMount () {
+    const { store } = this.props
+    this.unsubscribe = store.subscribe( () => this.forceUpdate() )
   }
-  return (
-    <a href='#' onClick={ e => {
-      e.preventDefault()
-      onClick(filter)
-    }}>
-      {children}
-    </a>
-  )
+
+  componentWillUnmount () {
+    this.unsubscribe()
+  }
+
+  render () {
+    const props = this.props
+    const { store } = props
+    const state = store.getState()
+
+    return (
+      <Link
+        active={state.visibilityFilter === props.filter}
+        onClick={ () => {
+          store.dispatch({
+            type: 'SET_VISIBILITY_FILTER',
+            filter: props.filter
+          })
+        }}>
+        {props.children}
+      </Link>
+    )
+  }
 }
 
 export default FilterLink
