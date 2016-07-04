@@ -22292,38 +22292,16 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _reactRedux = __webpack_require__(168);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	// import { connect } from 'react-redux'
 	// import { addTodo } from '../actions'
 
-	// let AddTodo = ({ dispatch }) => {
-	//   let input
-
-	//   return (
-	//     <div>
-	//       <form onSubmit={ e => {
-	//         e.preventDefault()
-	//         if (!input.value.trim()) {
-	//           return
-	//         }
-	//         dispatch(addTodo(input.value))
-	//         input.value = ''
-	//       }}>
-	//         <input ref={ node => input = node } />
-	//         <button type="submit">
-	//           Add Todo
-	//         </button>
-	//       </form>
-	//     </div>
-	//   )
-	// }
-
-	// AddTodo = connect()(AddTodo)
 	var nextTodoId = 0;
 
-	var AddTodo = function AddTodo(props, _ref) {
-	  var store = _ref.store;
+	var AddTodo = function AddTodo(_ref) {
+	  var dispatch = _ref.dispatch;
 
 	  var input = void 0;
 
@@ -22340,7 +22318,7 @@
 	      'button',
 	      { onClick: function onClick(e) {
 	          e.preventDefault();
-	          store.dispatch({
+	          dispatch({
 	            type: 'ADD_TODO',
 	            text: input.value,
 	            id: nextTodoId++
@@ -22353,9 +22331,7 @@
 	  );
 	};
 
-	AddTodo.contextTypes = {
-	  store: _react2.default.PropTypes.object
-	};
+	AddTodo = (0, _reactRedux.connect)()(AddTodo);
 
 	exports.default = AddTodo;
 
@@ -22422,11 +22398,11 @@
 	  value: true
 	});
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 	var _react = __webpack_require__(1);
 
 	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(168);
 
 	var _Link = __webpack_require__(201);
 
@@ -22434,89 +22410,26 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	// import { connect } from 'react-redux'
+	var mapStateToProps = function mapStateToProps(state, ownProps) {
+	  return {
+	    active: ownProps.filter === state.visibilityFilter
+	  };
+	};
 	// import { setVisibilityFilter } from '../actions'
 
 
-	// const mapStateToProps = (state, ownProps) => {
-	//   return {
-	//     active: ownProps.filter === state.visibilityFilter
-	//   }
-	// }
-
-	// const mapDispatchToProps = (dispatch, ownProps) => {
-	//   return {
-	//     onClick: () => {
-	//       dispatch(setVisibilityFilter(ownProps.filter))
-	//     }
-	//   }
-	// }
-
-	// const FilterLink = connect(
-	//   mapStateToProps,
-	//   mapDispatchToProps
-	// )(Link)
-
-	var FilterLink = function (_React$Component) {
-	  _inherits(FilterLink, _React$Component);
-
-	  function FilterLink() {
-	    _classCallCheck(this, FilterLink);
-
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(FilterLink).apply(this, arguments));
-	  }
-
-	  _createClass(FilterLink, [{
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      var _this2 = this;
-
-	      var store = this.context.store;
-
-	      this.unsubscribe = store.subscribe(function () {
-	        return _this2.forceUpdate();
+	var mapDispatchToProps = function mapDispatchToProps(dispatch, ownProps) {
+	  return {
+	    onClick: function onClick() {
+	      dispatch({
+	        type: 'SET_VISIBILITY_FILTER',
+	        filter: ownProps.filter
 	      });
 	    }
-	  }, {
-	    key: 'componentWillUnmount',
-	    value: function componentWillUnmount() {
-	      this.unsubscribe();
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var props = this.props;
-	      var store = this.context.store;
-
-	      var state = store.getState();
-
-	      return _react2.default.createElement(
-	        _Link2.default,
-	        {
-	          active: state.visibilityFilter === props.filter,
-	          onClick: function onClick() {
-	            store.dispatch({
-	              type: 'SET_VISIBILITY_FILTER',
-	              filter: props.filter
-	            });
-	          }, __self: this
-	        },
-	        props.children
-	      );
-	    }
-	  }]);
-
-	  return FilterLink;
-	}(_react2.default.Component);
-
-	FilterLink.contextTypes = {
-	  store: _react2.default.PropTypes.object
+	  };
 	};
+
+	var FilterLink = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_Link2.default);
 
 	exports.default = FilterLink;
 
@@ -22646,7 +22559,7 @@
 	  value: true
 	});
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _reactRedux = __webpack_require__(168);
 
 	var _react = __webpack_require__(1);
 
@@ -22658,11 +22571,6 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } // import { connect } from 'react-redux'
 	// import { toggleTodo } from '../actions'
 
 
@@ -22681,75 +22589,24 @@
 	  }
 	};
 
-	// const mapStateToProps = (state) => {
-	//   return {
-	//     todos: getVisibleTodos(state.todos, state.visibilityFilter)
-	//   }
-	// }
-
-	// const mapDispatchToProps = (dispatch) => {
-	//   return {
-	//     onTodoClick: (id) => dispatch(toggleTodo(id))
-	//   }
-	// }
-
-	// const VisibleTodoList = connect(
-	//   mapStateToProps,
-	//   mapDispatchToProps
-	// )(TodoList)
-
-	var VisibleTodoList = function (_React$Component) {
-	  _inherits(VisibleTodoList, _React$Component);
-
-	  function VisibleTodoList() {
-	    _classCallCheck(this, VisibleTodoList);
-
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(VisibleTodoList).apply(this, arguments));
-	  }
-
-	  _createClass(VisibleTodoList, [{
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      var _this2 = this;
-
-	      var store = this.context.store;
-
-	      this.unsubscribe = store.subscribe(function () {
-	        return _this2.forceUpdate();
-	      });
-	    }
-	  }, {
-	    key: 'componentWillUnmount',
-	    value: function componentWillUnmount() {
-	      this.unsubscribe();
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var props = this.props;
-	      var store = this.context.store;
-
-	      var state = store.getState();
-	      var visibleTodos = getVisibleTodos(state.todos, state.visibilityFilter);
-
-	      return _react2.default.createElement(_TodoList2.default, {
-	        todos: visibleTodos,
-	        onTodoClick: function onTodoClick(id) {
-	          store.dispatch({
-	            type: 'TOGGLE_TODO',
-	            id: id
-	          });
-	        }, __self: this
-	      });
-	    }
-	  }]);
-
-	  return VisibleTodoList;
-	}(_react2.default.Component);
-
-	VisibleTodoList.contextTypes = {
-	  store: _react2.default.PropTypes.object
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {
+	    todos: getVisibleTodos(state.todos, state.visibilityFilter)
+	  };
 	};
+
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return {
+	    onTodoClick: function onTodoClick(id) {
+	      dispatch({
+	        type: 'TOGGLE_TODO',
+	        id: id
+	      });
+	    }
+	  };
+	};
+
+	var VisibleTodoList = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_TodoList2.default);
 
 	exports.default = VisibleTodoList;
 

@@ -1,33 +1,10 @@
 import React from 'react'
-// import { connect } from 'react-redux'
+import { connect } from 'react-redux'
 // import { addTodo } from '../actions'
 
-// let AddTodo = ({ dispatch }) => {
-//   let input
-
-//   return (
-//     <div>
-//       <form onSubmit={ e => {
-//         e.preventDefault()
-//         if (!input.value.trim()) {
-//           return
-//         }
-//         dispatch(addTodo(input.value))
-//         input.value = ''
-//       }}>
-//         <input ref={ node => input = node } />
-//         <button type="submit">
-//           Add Todo
-//         </button>
-//       </form>
-//     </div>
-//   )
-// }
-
-// AddTodo = connect()(AddTodo)
 let nextTodoId = 0
 
-const AddTodo = (props, { store }) => {
+let AddTodo = ({ dispatch }) => {
     let input
 
     return (
@@ -35,7 +12,7 @@ const AddTodo = (props, { store }) => {
         <input ref={ node => {input = node} } type='text' />
         <button onClick={ (e) => {
           e.preventDefault()
-          store.dispatch({
+          dispatch({
             type: 'ADD_TODO',
             text: input.value,
             id: nextTodoId++
@@ -48,8 +25,6 @@ const AddTodo = (props, { store }) => {
     )
 }
 
-AddTodo.contextTypes = {
-  store: React.PropTypes.object
-}
+AddTodo = connect()(AddTodo)
 
 export default AddTodo
