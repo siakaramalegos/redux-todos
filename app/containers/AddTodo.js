@@ -1,8 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-// import { addTodo } from '../actions'
-
-let nextTodoId = 0
+import { addTodo } from '../actions'
 
 let AddTodo = ({ dispatch }) => {
     let input
@@ -12,11 +10,7 @@ let AddTodo = ({ dispatch }) => {
         <input ref={ node => {input = node} } type='text' />
         <button onClick={ (e) => {
           e.preventDefault()
-          dispatch({
-            type: 'ADD_TODO',
-            text: input.value,
-            id: nextTodoId++
-          })
+          dispatch(addTodo(input.value))
           input.value = ''
         }}>
           Add Todo
@@ -26,5 +20,4 @@ let AddTodo = ({ dispatch }) => {
 }
 
 AddTodo = connect()(AddTodo)
-
 export default AddTodo

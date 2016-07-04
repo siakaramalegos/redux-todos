@@ -22174,8 +22174,13 @@
 	};
 
 	// Action creators
+	var nextTodoId = 0;
 	function addTodo(text, id) {
-	  return { type: ADD_TODO, text: text, id: id };
+	  return {
+	    type: ADD_TODO,
+	    text: text,
+	    id: nextTodoId++
+	  };
 	}
 
 	function toggleTodo(id) {
@@ -22294,11 +22299,9 @@
 
 	var _reactRedux = __webpack_require__(168);
 
+	var _actions = __webpack_require__(195);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	// import { addTodo } from '../actions'
-
-	var nextTodoId = 0;
 
 	var AddTodo = function AddTodo(_ref) {
 	  var dispatch = _ref.dispatch;
@@ -22318,11 +22321,7 @@
 	      'button',
 	      { onClick: function onClick(e) {
 	          e.preventDefault();
-	          dispatch({
-	            type: 'ADD_TODO',
-	            text: input.value,
-	            id: nextTodoId++
-	          });
+	          dispatch((0, _actions.addTodo)(input.value));
 	          input.value = '';
 	        }, __self: undefined
 	      },
@@ -22332,7 +22331,6 @@
 	};
 
 	AddTodo = (0, _reactRedux.connect)()(AddTodo);
-
 	exports.default = AddTodo;
 
 /***/ },
@@ -22404,6 +22402,8 @@
 
 	var _reactRedux = __webpack_require__(168);
 
+	var _actions = __webpack_require__(195);
+
 	var _Link = __webpack_require__(201);
 
 	var _Link2 = _interopRequireDefault(_Link);
@@ -22415,16 +22415,11 @@
 	    active: ownProps.filter === state.visibilityFilter
 	  };
 	};
-	// import { setVisibilityFilter } from '../actions'
-
 
 	var mapDispatchToProps = function mapDispatchToProps(dispatch, ownProps) {
 	  return {
 	    onClick: function onClick() {
-	      dispatch({
-	        type: 'SET_VISIBILITY_FILTER',
-	        filter: ownProps.filter
-	      });
+	      dispatch((0, _actions.setVisibilityFilter)(ownProps.filter));
 	    }
 	  };
 	};
@@ -22561,6 +22556,8 @@
 
 	var _reactRedux = __webpack_require__(168);
 
+	var _actions = __webpack_require__(195);
+
 	var _react = __webpack_require__(1);
 
 	var _react2 = _interopRequireDefault(_react);
@@ -22570,9 +22567,6 @@
 	var _TodoList2 = _interopRequireDefault(_TodoList);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	// import { toggleTodo } from '../actions'
-
 
 	var getVisibleTodos = function getVisibleTodos(todos, filter) {
 	  switch (filter) {
@@ -22598,10 +22592,7 @@
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 	  return {
 	    onTodoClick: function onTodoClick(id) {
-	      dispatch({
-	        type: 'TOGGLE_TODO',
-	        id: id
-	      });
+	      dispatch((0, _actions.toggleTodo)(id));
 	    }
 	  };
 	};
