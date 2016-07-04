@@ -48,8 +48,6 @@
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 	var _react = __webpack_require__(1);
 
 	var _react2 = _interopRequireDefault(_react);
@@ -70,10 +68,6 @@
 
 	var _TodoList2 = _interopRequireDefault(_TodoList);
 
-	var _AddTodo = __webpack_require__(198);
-
-	var _AddTodo2 = _interopRequireDefault(_AddTodo);
-
 	var _Link = __webpack_require__(201);
 
 	var _Link2 = _interopRequireDefault(_Link);
@@ -90,46 +84,102 @@
 
 	var store = (0, _redux.createStore)(_reducers2.default);
 
-	var render = function render() {
-	  _reactDom2.default.render(_react2.default.createElement(App, _extends({}, store.getState(), {
-	    __self: undefined
-	  })), document.getElementById('app'));
-	};
-
 	// To delete:
+	// import AddTodo from './containers/AddTodo'
+
 
 	var nextTodoId = 0;
-	var App = function App(_ref) {
-	  var todos = _ref.todos;
-	  var visibilityFilter = _ref.visibilityFilter;
+	var App = function App() {
 	  return _react2.default.createElement(
 	    'div',
 	    {
 	      __self: undefined
 	    },
-	    _react2.default.createElement(_AddTodo2.default, {
-	      onAddClick: function onAddClick(text) {
-	        return store.dispatch({
-	          type: 'ADD_TODO',
-	          text: text,
-	          id: nextTodoId++
-	        });
-	      }, __self: undefined
+	    _react2.default.createElement(AddTodo, {
+	      __self: undefined
 	    }),
-	    _react2.default.createElement(_TodoList2.default, {
-	      todos: getVisibleTodos(todos, visibilityFilter),
-	      onTodoClick: function onTodoClick(id) {
-	        store.dispatch({
-	          type: 'TOGGLE_TODO',
-	          id: id
-	        });
-	      }, __self: undefined
+	    _react2.default.createElement(VisibileTodoList, {
+	      __self: undefined
 	    }),
 	    _react2.default.createElement(Footer, {
 	      __self: undefined
 	    })
 	  );
 	};
+
+	var AddTodo = function AddTodo() {
+	  var input = void 0;
+
+	  return _react2.default.createElement(
+	    'form',
+	    {
+	      __self: undefined
+	    },
+	    _react2.default.createElement('input', { ref: function ref(node) {
+	        input = node;
+	      }, type: 'text', __self: undefined
+	    }),
+	    _react2.default.createElement(
+	      'button',
+	      { onClick: function onClick(e) {
+	          e.preventDefault();
+	          store.dispatch({
+	            type: 'ADD_TODO',
+	            text: input.value,
+	            id: nextTodoId++
+	          });
+	          input.value = '';
+	        }, __self: undefined
+	      },
+	      'Add Todo'
+	    )
+	  );
+	};
+
+	var VisibileTodoList = function (_React$Component) {
+	  _inherits(VisibileTodoList, _React$Component);
+
+	  function VisibileTodoList() {
+	    _classCallCheck(this, VisibileTodoList);
+
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(VisibileTodoList).apply(this, arguments));
+	  }
+
+	  _createClass(VisibileTodoList, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      var _this2 = this;
+
+	      this.unsubscribe = store.subscribe(function () {
+	        return _this2.forceUpdate();
+	      });
+	    }
+	  }, {
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      this.unsubscribe();
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var props = this.props;
+	      var state = store.getState();
+	      var visibleTodos = getVisibleTodos(state.todos, state.visibilityFilter);
+
+	      return _react2.default.createElement(_TodoList2.default, {
+	        todos: visibleTodos,
+	        onTodoClick: function onTodoClick(id) {
+	          store.dispatch({
+	            type: 'TOGGLE_TODO',
+	            id: id
+	          });
+	        }, __self: this
+	      });
+	    }
+	  }]);
+
+	  return VisibileTodoList;
+	}(_react2.default.Component);
 
 	var Footer = function Footer() {
 	  return _react2.default.createElement(
@@ -162,8 +212,8 @@
 	  );
 	};
 
-	var FilterLink = function (_React$Component) {
-	  _inherits(FilterLink, _React$Component);
+	var FilterLink = function (_React$Component2) {
+	  _inherits(FilterLink, _React$Component2);
 
 	  function FilterLink() {
 	    _classCallCheck(this, FilterLink);
@@ -174,10 +224,10 @@
 	  _createClass(FilterLink, [{
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
-	      var _this2 = this;
+	      var _this4 = this;
 
 	      this.unsubscribe = store.subscribe(function () {
-	        return _this2.forceUpdate();
+	        return _this4.forceUpdate();
 	      });
 	    }
 	  }, {
@@ -225,8 +275,9 @@
 	  }
 	};
 
-	store.subscribe(render);
-	render();
+	_reactDom2.default.render(_react2.default.createElement(App, {
+	  __self: undefined
+	}), document.getElementById('app'));
 
 /***/ },
 /* 1 */
@@ -22430,78 +22481,7 @@
 	exports.default = Todo;
 
 /***/ },
-/* 198 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	// import { connect } from 'react-redux'
-	// import { addTodo } from '../actions'
-
-	// let AddTodo = ({ dispatch }) => {
-	//   let input
-
-	//   return (
-	//     <div>
-	//       <form onSubmit={ e => {
-	//         e.preventDefault()
-	//         if (!input.value.trim()) {
-	//           return
-	//         }
-	//         dispatch(addTodo(input.value))
-	//         input.value = ''
-	//       }}>
-	//         <input ref={ node => input = node } />
-	//         <button type="submit">
-	//           Add Todo
-	//         </button>
-	//       </form>
-	//     </div>
-	//   )
-	// }
-
-	// AddTodo = connect()(AddTodo)
-
-	var AddTodo = function AddTodo(_ref) {
-	  var onAddClick = _ref.onAddClick;
-
-	  var input = void 0;
-
-	  return _react2.default.createElement(
-	    'form',
-	    {
-	      __self: undefined
-	    },
-	    _react2.default.createElement('input', { ref: function ref(node) {
-	        input = node;
-	      }, type: 'text', __self: undefined
-	    }),
-	    _react2.default.createElement(
-	      'button',
-	      { onClick: function onClick(e) {
-	          e.preventDefault();
-	          onAddClick(input.value);
-	          input.value = '';
-	        }, __self: undefined
-	      },
-	      'Add Todo'
-	    )
-	  );
-	};
-
-	exports.default = AddTodo;
-
-/***/ },
+/* 198 */,
 /* 199 */,
 /* 200 */,
 /* 201 */

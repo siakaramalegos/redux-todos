@@ -7,40 +7,67 @@ import todoApp from './reducers'
 
 let store = createStore(todoApp)
 
-const render = () => {
-  ReactDOM.render(
-    <App {...store.getState()} />,
-    document.getElementById('app')
-  )
-}
-
 // To delete:
 import TodoList from './components/TodoList'
-import AddTodo from './containers/AddTodo'
+// import AddTodo from './containers/AddTodo'
 import Link from './components/Link'
 
 let nextTodoId = 0
-const App = ({todos, visibilityFilter}) => (
+const App = () => (
   <div>
-    <AddTodo
-      onAddClick={ (text) =>
-        store.dispatch({
-          type: 'ADD_TODO',
-          text,
-          id: nextTodoId++
-        })
-      } />
-    <TodoList
-      todos={getVisibleTodos(todos, visibilityFilter)}
-      onTodoClick={ (id) => {
-        store.dispatch({
-          type: 'TOGGLE_TODO',
-          id: id
-        })
-      }} />
+    <AddTodo />
+    <VisibileTodoList />
     <Footer />
   </div>
 )
+
+const AddTodo = () => {
+  let input
+
+  return (
+    <form>
+      <input ref={ node => {input = node} } type='text' />
+      <button onClick={ (e) => {
+        e.preventDefault()
+        store.dispatch({
+          type: 'ADD_TODO',
+          text: input.value,
+          id: nextTodoId++
+        })
+        input.value = ''
+      }}>
+        Add Todo
+      </button>
+    </form>
+  )
+}
+
+class VisibileTodoList extends React.Component {
+  componentDidMount () {
+    this.unsubscribe = store.subscribe( () => this.forceUpdate() )
+  }
+
+  componentWillUnmount () {
+    this.unsubscribe()
+  }
+
+  render () {
+    const props = this.props
+    const state = store.getState()
+    const visibleTodos = getVisibleTodos(state.todos, state.visibilityFilter)
+
+    return (
+      <TodoList
+        todos={visibleTodos}
+        onTodoClick={(id) => {
+          store.dispatch({
+            type: 'TOGGLE_TODO',
+            id: id
+          })
+        }} />
+    )
+  }
+}
 
 const Footer = () => {
   return (
@@ -94,7 +121,7 @@ const getVisibleTodos = (todos, filter) => {
   }
 }
 
-store.subscribe(render)
-render()
-
-
+ReactDOM.render(
+  <App />,
+  document.getElementById('app')
+)
