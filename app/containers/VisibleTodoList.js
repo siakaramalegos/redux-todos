@@ -33,7 +33,7 @@ const getVisibleTodos = (todos, filter) => {
 
 class VisibleTodoList extends React.Component {
   componentDidMount () {
-    const { store } = this.props
+    const { store } = this.context
     this.unsubscribe = store.subscribe( () => this.forceUpdate() )
   }
 
@@ -43,7 +43,7 @@ class VisibleTodoList extends React.Component {
 
   render () {
     const props = this.props
-    const { store } = props
+    const { store } = this.context
     const state = store.getState()
     const visibleTodos = getVisibleTodos(state.todos, state.visibilityFilter)
 
@@ -51,13 +51,17 @@ class VisibleTodoList extends React.Component {
       <TodoList
         todos={visibleTodos}
         onTodoClick={(id) => {
-          props.store.dispatch({
+          store.dispatch({
             type: 'TOGGLE_TODO',
             id: id
           })
         }} />
     )
   }
+}
+
+VisibleTodoList.contextTypes = {
+  store: React.PropTypes.object
 }
 
 export default VisibleTodoList

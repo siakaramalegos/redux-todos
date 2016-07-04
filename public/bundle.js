@@ -46,6 +46,8 @@
 
 	'use strict';
 
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 	var _react = __webpack_require__(1);
 
 	var _react2 = _interopRequireDefault(_react);
@@ -66,9 +68,54 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	_reactDom2.default.render(_react2.default.createElement(_App2.default, { store: (0, _redux.createStore)(_reducers2.default), __self: undefined
-	}), document.getElementById('app'));
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	// import { Provider } from 'react-redux'
+
+
+	var Provider = function (_React$Component) {
+	  _inherits(Provider, _React$Component);
+
+	  function Provider() {
+	    _classCallCheck(this, Provider);
+
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Provider).apply(this, arguments));
+	  }
+
+	  _createClass(Provider, [{
+	    key: 'getChildContext',
+	    value: function getChildContext() {
+	      return {
+	        store: this.props.store
+	      };
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return this.props.children;
+	    }
+	  }]);
+
+	  return Provider;
+	}(_react2.default.Component);
+	// Must turn on proptypes for the context feature to work
+
+
+	Provider.childContextTypes = {
+	  store: _react2.default.PropTypes.object
+	};
+
+	_reactDom2.default.render(_react2.default.createElement(
+	  Provider,
+	  { store: (0, _redux.createStore)(_reducers2.default), __self: undefined
+	  },
+	  _react2.default.createElement(_App2.default, {
+	    __self: undefined
+	  })
+	), document.getElementById('app'));
 
 /***/ },
 /* 1 */
@@ -21458,7 +21505,7 @@
 	// AddTodo = connect()(AddTodo)
 	var nextTodoId = 0;
 
-	var AddTodo = function AddTodo(_ref) {
+	var AddTodo = function AddTodo(props, _ref) {
 	  var store = _ref.store;
 
 	  var input = void 0;
@@ -21489,6 +21536,10 @@
 	  );
 	};
 
+	AddTodo.contextTypes = {
+	  store: _react2.default.PropTypes.object
+	};
+
 	exports.default = AddTodo;
 
 /***/ },
@@ -21511,9 +21562,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var Footer = function Footer(_ref) {
-	  var store = _ref.store;
-
+	var Footer = function Footer() {
 	  return _react2.default.createElement(
 	    'div',
 	    {
@@ -21523,21 +21572,21 @@
 	    '  ',
 	    _react2.default.createElement(
 	      _FilterLink2.default,
-	      { filter: 'SHOW_ALL', store: store, __self: undefined
+	      { filter: 'SHOW_ALL', __self: undefined
 	      },
 	      'All'
 	    ),
 	    '  ',
 	    _react2.default.createElement(
 	      _FilterLink2.default,
-	      { filter: 'SHOW_COMPLETED', store: store, __self: undefined
+	      { filter: 'SHOW_COMPLETED', __self: undefined
 	      },
 	      'Completed'
 	    ),
 	    '  ',
 	    _react2.default.createElement(
 	      _FilterLink2.default,
-	      { filter: 'SHOW_ACTIVE', store: store, __self: undefined
+	      { filter: 'SHOW_ACTIVE', __self: undefined
 	      },
 	      'Active'
 	    )
@@ -21610,7 +21659,7 @@
 	    value: function componentDidMount() {
 	      var _this2 = this;
 
-	      var store = this.props.store;
+	      var store = this.context.store;
 
 	      this.unsubscribe = store.subscribe(function () {
 	        return _this2.forceUpdate();
@@ -21625,7 +21674,7 @@
 	    key: 'render',
 	    value: function render() {
 	      var props = this.props;
-	      var store = props.store;
+	      var store = this.context.store;
 
 	      var state = store.getState();
 
@@ -21647,6 +21696,10 @@
 
 	  return FilterLink;
 	}(_react2.default.Component);
+
+	FilterLink.contextTypes = {
+	  store: _react2.default.PropTypes.object
+	};
 
 	exports.default = FilterLink;
 
@@ -21746,18 +21799,20 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var App = function App(_ref) {
-	  var store = _ref.store;
+	var App = function App() {
 	  return _react2.default.createElement(
 	    'div',
 	    {
 	      __self: undefined
 	    },
-	    _react2.default.createElement(_AddTodo2.default, { store: store, __self: undefined
+	    _react2.default.createElement(_AddTodo2.default, {
+	      __self: undefined
 	    }),
-	    _react2.default.createElement(_VisibleTodoList2.default, { store: store, __self: undefined
+	    _react2.default.createElement(_VisibleTodoList2.default, {
+	      __self: undefined
 	    }),
-	    _react2.default.createElement(_Footer2.default, { store: store, __self: undefined
+	    _react2.default.createElement(_Footer2.default, {
+	      __self: undefined
 	    })
 	  );
 	};
@@ -21840,7 +21895,7 @@
 	    value: function componentDidMount() {
 	      var _this2 = this;
 
-	      var store = this.props.store;
+	      var store = this.context.store;
 
 	      this.unsubscribe = store.subscribe(function () {
 	        return _this2.forceUpdate();
@@ -21855,7 +21910,7 @@
 	    key: 'render',
 	    value: function render() {
 	      var props = this.props;
-	      var store = props.store;
+	      var store = this.context.store;
 
 	      var state = store.getState();
 	      var visibleTodos = getVisibleTodos(state.todos, state.visibilityFilter);
@@ -21863,7 +21918,7 @@
 	      return _react2.default.createElement(_TodoList2.default, {
 	        todos: visibleTodos,
 	        onTodoClick: function onTodoClick(id) {
-	          props.store.dispatch({
+	          store.dispatch({
 	            type: 'TOGGLE_TODO',
 	            id: id
 	          });
@@ -21874,6 +21929,10 @@
 
 	  return VisibleTodoList;
 	}(_react2.default.Component);
+
+	VisibleTodoList.contextTypes = {
+	  store: _react2.default.PropTypes.object
+	};
 
 	exports.default = VisibleTodoList;
 

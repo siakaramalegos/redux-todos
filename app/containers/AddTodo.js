@@ -27,25 +27,29 @@ import React from 'react'
 // AddTodo = connect()(AddTodo)
 let nextTodoId = 0
 
-const AddTodo = ({store}) => {
-  let input
+const AddTodo = (props, { store }) => {
+    let input
 
-  return (
-    <form>
-      <input ref={ node => {input = node} } type='text' />
-      <button onClick={ (e) => {
-        e.preventDefault()
-        store.dispatch({
-          type: 'ADD_TODO',
-          text: input.value,
-          id: nextTodoId++
-        })
-        input.value = ''
-      }}>
-        Add Todo
-      </button>
-    </form>
-  )
+    return (
+      <form>
+        <input ref={ node => {input = node} } type='text' />
+        <button onClick={ (e) => {
+          e.preventDefault()
+          store.dispatch({
+            type: 'ADD_TODO',
+            text: input.value,
+            id: nextTodoId++
+          })
+          input.value = ''
+        }}>
+          Add Todo
+        </button>
+      </form>
+    )
+}
+
+AddTodo.contextTypes = {
+  store: React.PropTypes.object
 }
 
 export default AddTodo
